@@ -1,24 +1,29 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import Youtube from '../apis/Youtube';
+// import Youtube from '../apis/Youtube';
 const KEY = "AIzaSyCLCTtmFC9x98rBBqOivcImbwi4fv3Dzuk";
+
 
 
 const useVideo = ({ defaultSearchTerm }) => {
   const [videos, setVideos] = useState([]);
-
-  useEffect(() => { 
+  const Youtube = process.env.REACT_APP_URL;
+  // const youtubeKey = process.env.REACT_APP_SECRET_KEY;
+  useEffect(() => {
     search(defaultSearchTerm);
   }, [defaultSearchTerm]);
 
+  // console.log(process.env.REACT_APP_URL)
 
   const search = async (term) => {
-    const response = await Youtube.get("/search", {
+    const response = await axios.get(`${Youtube}/search`, {
       params: {
         q: term,
         part: "snippet",
         type: "video",
         maxResults: 5,
         key: KEY,
+        // key: youtubeKey,
       },
     });
     // console.log(response);
@@ -38,7 +43,7 @@ const useVideo = ({ defaultSearchTerm }) => {
   // 1. Using useState that returns array and has a setter function inside it.
   // 2. Using JavaScript objects.
 
-  return [videos, search ];
+  return [videos, search];
 };
 
 export default useVideo;
